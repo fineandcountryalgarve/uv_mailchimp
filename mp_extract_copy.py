@@ -30,7 +30,7 @@ data_center = get_data_center()
 
 start_date, end_date = get_dynamic_date_range()
 
-customers_crm = pd.DataFrame()
+print (start_date, end_date)
 
 try:
   if start_date and end_date:
