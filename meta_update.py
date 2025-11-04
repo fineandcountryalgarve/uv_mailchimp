@@ -14,6 +14,7 @@ base_url = get_base_url()
 api_key = get_api_key()
 
 df_pre_enquiries = read_gsheet_to_df("1VY-q3fM5u1W9aPYavcHFt2xDjyO9ojKqcTm2jtiF7_8", "Sheet1")
+df_pre_enquiries_2 = read_gsheet_to_df("1tXoC7jdp1SkhJFExQxVFeqp1hv9D0pKyflzNRUZBIog", "Sheet1")
 
 def process_crm_data(df):
     df['First Name ENG'] = df['full_name'].apply(lambda x: x.split()[0])
@@ -23,18 +24,20 @@ def process_crm_data(df):
     df['Speaks'] = 'English'
     df['Tags'] = 'ENG'
     df['Client nature'] = 'Buyer'
+    df = df.rename(columns={"email": "Email"})
+    df = df[['Email', 'Client nature', 'Speaks', 'First Name FRE', 'First Name POR', 'First Name GER', 
+                               'First Name ENG', 'Tags',]]
     return df
 
 df_pre_enquiries = process_crm_data(df_pre_enquiries)
+df_pre_enquiries_2 = process_crm_data(df_pre_enquiries_2)
 
-df_pre_enquiries = df_pre_enquiries.rename(columns={"email": "Email"})
+fb_pre_enquiries = pd.concat([df_pre_enquiries, df_pre_enquiries_2])
 
-df_pre_enquiries = df_pre_enquiries[['Email', 'Client nature', 'Speaks', 'First Name FRE', 'First Name POR', 'First Name GER', 
-                                          'First Name ENG', 'Tags',]]
-display (df_pre_enquiries) 
+display (fb_pre_enquiries)
 
 # Iterate over the rows of your DataFrame
-for index, row in df_pre_enquiries.iterrows():
+for index, row in fb_pre_enquiries.iterrows():
     # Prepare the subscriber data
     subscriber_data = {
         "email_address": row['Email'],         # Email address
